@@ -4,18 +4,24 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
     <title>Simple Calculator</title>
+    <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
+    <div class="error-message">
+        <span>You tried to divide by zero!!! 🙄</span>
+        <span>Really? 🤷‍♂️</span>
+    </div>
     <div class="calculator">
-        <div class="results">
+        <section class="results">
             <div class="sub-result">
-                <span class="first-operand">5</span>
+                <span class="first-operand">1245635634563653636363636</span>&nbsp;
                 <span class="operation">+</span>
             </div>
-            <div class="main-result">12</div>
-        </div>
-        <div class="functionalities grid">
+            <div class="main-result">1245635634563653636363636</div>
+        </section>
+        <section class="functionalities grid">
             <button class="grid__item span-2" data-AC>AC</button>
             <button class="grid__item" data-DEL>DEL</button>
             <button class="grid__item" data-operation="÷">÷</button>
@@ -34,7 +40,7 @@
             <button class="grid__item" data-floating-point>.</button>
             <button class="grid__item" data-number="0">0</button>
             <button class="grid__item span-2" data-equal-sign>=</button>
-        </div>
+        </section>
     </div>
 </body>
 </html>
