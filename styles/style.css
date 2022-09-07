@@ -30,9 +30,20 @@
     box-sizing: border-box;
 }
 
+/* page selection */
 ::selection {
     background-color: var(--color-red);
     color: var(--color-text);
+}
+/* page scrollbar */
+::-webkit-scrollbar {
+    width: 0.625rem; /* 10px */
+    background-color: var(--color-black-900);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-black-300);
+    border-radius: 3.125rem; /* 50px */
 }
 
 /* 3. VARIABLES */
@@ -64,6 +75,8 @@ body {
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* 5. CALCULATOR STYLING */
