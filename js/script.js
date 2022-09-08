@@ -1,4 +1,8 @@
 
+// imports
+import { updateHTML } from "./DOManip.js";
+import { handleDeletingLastNumber, handleConcatenatingNumbers } from "./calculator.js";
+
 // DOM elements
 const firstOperandElement = document.querySelector("[data-first-operand]");
 const operationElement = document.querySelector("[data-chosen-operation]");
@@ -10,39 +14,31 @@ let mainResult = 0;
 let firstOperand = 0;
 let currentOperation = '';
 
+// helper function
 function printGlobalVariables() {
-    console.log('Main result: ' + mainResult);
-    console.log('First operand: ' + firstOperand);
-    console.log('Current operation: ' + currentOperation);
+    console.log(mainResult);
+    console.log(firstOperand);
+    console.log(currentOperation);
 }
 
+// setting default values and clearing calculator data
+window.onload = () => clearAll(true);
 
-window.onload = () => clearAll();
-
+// handling clicking on calculator buttons
 functionsContainer.addEventListener('click', e => {
     const {role, value} = determineRole(e.target);
     if (role === 'special-button') {
         handleSpecialButtons(value);
     } else if (role === 'number') {
-        // CONTINUE HERE...
+        mainResult = handleConcatenatingNumbers(mainResult, value);
+        updateHTML(mainResultElement, mainResult);
     } else if (role === 'operation') {
-
+        handleOperation(value);
     }
+    printGlobalVariables();
 });
 
-function handleSpecialButtons(label) {
-    if (label === 'AC') {
-        clearAll();
-    } else if (label === 'DEL') {
-        mainResult = handleDeletingLastNumber(mainResult);
-        updateHTML(mainResultElement, mainResult);
-    } else if (label === 'point') {
-
-    } else if (label === 'equal') {
-
-    }
-}
-
+// determining button role and its function
 function determineRole(button) {
     if (button.dataset.ac) return { role: 'special-button', value: 'AC' }
     if (button.dataset.del) return { role: 'special-button', value: 'DEL' }
@@ -52,8 +48,33 @@ function determineRole(button) {
     if (button.dataset.operation) return { role: 'operation', value: button.dataset.operation }
 }
 
-function clearAll() {
-    if (mainResult === 0 && firstOperand === 0 && currentOperation === '') return;
+// handling special button (AC, DEL, ., =)
+function handleSpecialButtons(label) {
+    if (label === 'AC') {
+        clearAll();
+    } else if (label === 'DEL') {
+        mainResult = handleDeletingLastNumber(mainResult);
+        updateHTML(mainResultElement, mainResult);
+    } else if (label === 'point') {
+
+    } else if (label === 'equal') {
+        mainResult = handleEqual(mainResult, firstOperand, operation);
+    }
+}
+
+function handleOperation(newOperation) {
+    currentOperation = newOperation;
+    updateHTML(operationElement, currentOperation);
+
+    firstOperand = mainResult;
+    updateHTML(firstOperandElement, firstOperand);
+
+    mainResult = 0;
+    updateHTML(mainResultElement, mainResult);
+}
+
+export function clearAll(force = false) {
+    if (mainResult === 0 && firstOperand === 0 && currentOperation === '' && force !== true) return;
     
     mainResult = 0;
     firstOperand = 0;
@@ -62,23 +83,4 @@ function clearAll() {
     updateHTML(mainResultElement, 0);
     updateHTML(firstOperandElement, '');
     updateHTML(operationElement, '');
-}
-
-function handleDeletingLastNumber(mainResult) {
-    if (mainResult === 0) return mainResult;
-    
-    const mainResultString = mainResult.toString();
-    if (mainResultString.length === 1 || mainResultString.match(/e/)) {
-        return 0;
-    }
-
-    // try to improve calculator so that scientific number can also be 
-    // handled in a nicer way than just resetting main result to 0
-
-    const newMainResult = mainResultString.substring(0, mainResultString.length - 1);
-    return Number(newMainResult);
-}
-
-function updateHTML(element, value) {
-    element.textContent = value;
 }

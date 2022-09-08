@@ -95,7 +95,7 @@ body {
 .results {
     padding: 1.5rem;
     width: 100%;
-    background-color: rgb(40, 40, 40, 0.8);
+    background-color: rgb(40, 40, 40, 0.85);
 }
 
 .sub-result {
@@ -168,7 +168,7 @@ even though some big numbers are on screen */
 .error-message {
     position: fixed;
     top: 0;
-    background-color: rgb(40, 40, 40, 0.8);
+    background-color: rgb(40, 40, 40, 0.85);
     color: var(--color-text);
     padding: 1.5rem;
     font-size: var(--font-extra-small);
