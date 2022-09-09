@@ -1,7 +1,12 @@
 
 // imports
-import { updateHTML } from "./DOManip.js";
-import { handleDeletingLastNumber, handleConcatenatingNumbers } from "./calculator.js";
+import { updateHTML, showErrorMessage, disablePointBtn, enablePointBtn } from "./DOManip.js";
+import { 
+    handleDeletingLastNumber, 
+    handleConcatenatingNumbers, 
+    calculate,
+    handleDecimalPointNumber
+} from "./calculator.js";
 
 // DOM elements
 const firstOperandElement = document.querySelector("[data-first-operand]");
@@ -10,7 +15,7 @@ const mainResultElement = document.querySelector("[data-main-result]");
 const functionsContainer = document.querySelector("[data-functions]");
 
 // global variables
-let mainResult = 0;
+let mainResult = '0';
 let firstOperand = 0;
 let currentOperation = '';
 
@@ -22,10 +27,13 @@ function printGlobalVariables() {
 }
 
 // setting default values and clearing calculator data
-window.onload = () => clearAll(true);
+window.onload = () => clearAll();
 
 // handling clicking on calculator buttons
 functionsContainer.addEventListener('click', e => {
+    // returns immediately if the user accidentally clicked somewhere between buttons
+    if (e.target.tagName !== 'BUTTON') return;
+
     const {role, value} = determineRole(e.target);
     if (role === 'special-button') {
         handleSpecialButtons(value);
@@ -35,6 +43,9 @@ functionsContainer.addEventListener('click', e => {
     } else if (role === 'operation') {
         handleOperation(value);
     }
+
+    // if the mainResult doesn't contain dot, let user the option to add it
+    if (mainResult.indexOf('.') === -1) enablePointBtn();
     printGlobalVariables();
 });
 
@@ -56,29 +67,59 @@ function handleSpecialButtons(label) {
         mainResult = handleDeletingLastNumber(mainResult);
         updateHTML(mainResultElement, mainResult);
     } else if (label === 'point') {
-
+        handlePoint();
     } else if (label === 'equal') {
-        mainResult = handleEqual(mainResult, firstOperand, operation);
+        handleEqual(mainResult, firstOperand, currentOperation);
     }
 }
 
 function handleOperation(newOperation) {
+    const newCalculations = calculate(mainResult, firstOperand, currentOperation);
+    if (newCalculations.validExpression === false) {
+        showErrorMessage();
+        clearAll(); return;
+    }
+
+    mainResult = '0';
+    firstOperand = handleDecimalPointNumber(Number(newCalculations.mainResult));
     currentOperation = newOperation;
-    updateHTML(operationElement, currentOperation);
-
-    firstOperand = mainResult;
-    updateHTML(firstOperandElement, firstOperand);
-
-    mainResult = 0;
+    
     updateHTML(mainResultElement, mainResult);
+    updateHTML(firstOperandElement, firstOperand);
+    updateHTML(operationElement, currentOperation);
 }
 
-export function clearAll(force = false) {
-    if (mainResult === 0 && firstOperand === 0 && currentOperation === '' && force !== true) return;
-    
-    mainResult = 0;
-    firstOperand = 0;
+function handleEqual() {
+    const newCalculations = calculate(mainResult, firstOperand, currentOperation);
+    if (newCalculations.validExpression === false) {
+        showErrorMessage();
+        clearAll(); return;
+    }
+
+    mainResult = newCalculations.mainResult;
+    firstOperand = newCalculations.firstOperand;
     currentOperation = '';
+
+    updateHTML(mainResultElement, mainResult);
+    updateHTML(firstOperandElement, '');
+    updateHTML(operationElement, '');
+}
+
+function handlePoint() {
+    // don't change anything if dot is already active
+    if (mainResultElement.textContent.includes('.')) return;
+
+    mainResult += '.';
+    updateHTML(mainResultElement, mainResult);
+    disablePointBtn();
+}
+
+function clearAll() {
+    if (mainResult !== 0 || firstOperand !== 0 || currentOperation !== '') {
+        mainResult = '0';
+        firstOperand = 0;
+        currentOperation = '';
+    }
 
     updateHTML(mainResultElement, 0);
     updateHTML(firstOperandElement, '');

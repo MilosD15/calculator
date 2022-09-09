@@ -152,12 +152,20 @@ even though some big numbers are on screen */
     font-size: var(--font-medium);
     padding: 1.2rem;
     user-select: none;
-    transition: background-color 150ms ease;
+    transition: 
+        background-color 150ms ease,
+        color 150ms ease;
 }
 
 .grid__item:hover,
 .grid__item[data-active="true"] {
     background-color: var(--color-black-300);
+}
+
+.grid__item[data-disabled="true"] {
+    cursor: not-allowed;
+    background-color: var(--color-black-900);
+    color: var(--color-bg-scrollbar);
 }
 
 .span-2 {
@@ -180,11 +188,11 @@ even though some big numbers are on screen */
     gap: .4rem;
     align-items: center;
     margin-inline: 1rem;
-    transform: translateY(-12.5rem); /* 200px */
     opacity: 0;
+    transform: translateY(-12.5rem); /* 200px */
     transition: 
-        transform 400ms ease,
-        opacity 400ms ease;
+        opacity 400ms ease,
+        transform 400ms ease;
 }
 
 .error-message[data-active="true"] {
