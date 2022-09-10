@@ -29,6 +29,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    outline: none;
 }
 
 /* page selection */
@@ -159,6 +160,7 @@ even though some big numbers are on screen */
 }
 
 .grid__item:hover,
+.grid__item:focus,
 .grid__item[data-active="true"] {
     background-color: var(--color-black-300);
 }
