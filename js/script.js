@@ -87,7 +87,6 @@ function handleCalculatorActions(role, value) {
         updateGlobalVariables(handleOperation(mainResult, firstOperand, currentOperation, value));
     }
 
-    console.log(mainResult)
     // if the mainResult doesn't contain dot, let user the option to add it
     if (mainResult.indexOf('.') === -1) enablePointBtn();
     // if the mainResult does contain dot, don't allow the user to add another one
