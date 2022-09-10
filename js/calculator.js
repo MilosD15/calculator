@@ -1,5 +1,5 @@
 
-// FUNCTIONS RELATED TO HANDLING CALCULATOR ACTIONS
+// FUNCTIONS RELATED TO HANDLING CALCULATOR ACTIONS (NO DOM MANIPULATION)
 
 export function calculate(mainResult, firstOperand, currentOperation) {
     if (currentOperation === '÷' && mainResult === '0') 
@@ -23,9 +23,6 @@ export function handleDeletingLastNumber(mainResult) {
     if (mainResult === '0') return '0';
     
     if (mainResult.length === 1 || mainResult.match(/e/)) return '0';
-
-    // try to improve calculator so that scientific number can also be 
-    // handled in a nicer way than just resetting main result to 0
 
     const newMainResult = mainResult.substring(0, mainResult.length - 1);
     // erase the dot if it's the last character in mainResult string
